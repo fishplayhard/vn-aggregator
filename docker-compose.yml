@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: vn-price-compare-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vn_price_compare
+      POSTGRES_USER: vnprice
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - vn-price-compare
+
+  # Redis (optional, for caching)
+  redis:
+    image: redis:7-alpine
+    container_name: vn-price-compare-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - vn-price-compare
+
+  # Main Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vn-price-compare-app
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: "postgresql://vnprice:password123@postgres:5432/vn_price_compare?schema=public"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "your-secret-key-here"
+      USER_AGENT: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - vn-price-compare
+    volumes:
+      - ./screenshots:/app/screenshots
+      - ./videos:/app/videos
+
+volumes:
+  postgres_data:
+
+networks:
+  vn-price-compare:
+    driver: bridge

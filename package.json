@@ -1,0 +1,55 @@
+{
+  "name": "vn-price-compare",
+  "version": "1.0.0",
+  "description": "Vietnamese price comparison platform - MVP clone of Heureka.cz",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "scrape": "tsx scripts/scrape.ts",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fishplayhard/vn-aggregator.git"
+  },
+  "keywords": [
+    "price-comparison",
+    "vietnam",
+    "e-commerce",
+    "scraping",
+    "nextjs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fishplayhard/vn-aggregator/issues"
+  },
+  "homepage": "https://github.com/fishplayhard/vn-aggregator#readme",
+  "dependencies": {
+    "@prisma/client": "^6.13.0",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^24.2.0",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@typescript-eslint/eslint-plugin": "^8.39.0",
+    "@typescript-eslint/parser": "^8.39.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.32.0",
+    "eslint-config-next": "^15.4.5",
+    "next": "^15.4.5",
+    "playwright": "^1.54.2",
+    "postcss": "^8.5.6",
+    "prisma": "^6.13.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^4.1.11",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.2"
+  }
+}

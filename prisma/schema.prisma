@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String   @unique // Normalized product name
+  brand       String?  // Detected brand (Apple, Samsung, etc.)
+  model       String?  // Detected model (iPhone 13 Pro, etc.)
+  storage     String?  // Detected storage (128GB, 256GB, etc.)
+  image       String?  // Product image URL
+  rawTitle    String   // Original title from scraping
+  isOfficial  Boolean  @default(false) // Flag for "Chính Hãng"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  offers Offer[]
+
+  @@map("products")
+}
+
+model Shop {
+  id        String   @id @default(cuid())
+  name      String   @unique // Shop/seller name
+  domain    String   @unique // Domain (tiki.vn, shopee.vn, etc.)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  offers Offer[]
+
+  @@map("shops")
+}
+
+model Offer {
+  id            String   @id @default(cuid())
+  productId     String
+  shopId        String
+  price         Float    // Price in VND
+  url           String   // Product page URL
+  lastCheckedAt DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  shop    Shop    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, shopId])
+  @@map("offers")
+}
